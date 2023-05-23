@@ -21,8 +21,7 @@ const convertAbi = () => {
 const timeSerializer = (currentTimestamp) => {
   const currentDate = new Date(currentTimestamp);
   currentDate.setHours(0, 0, 0, 0);
-  // I do not divide by 1000 because blockchain timestamps are in seconds units
-  const timestamp = Math.floor(currentDate.getTime());
+  const timestamp = Math.floor(currentDate.getTime() / 1000);
 
   return timestamp;
 };
@@ -38,7 +37,7 @@ const getBlockDeployement = async () => {
 
 const preSetupGraphTable = async (amountDay) => {
   const blockDeploy = await getBlockDeployement();
-  const timestampDeployment = timeSerializer(blockDeploy.timestamp);
+  const timestampDeployment = timeSerializer(blockDeploy.timestamp * 1000);
   const secsInDay = 84600;
   for (let i = 0; i < amountDay; i++) {
     insert(timestampDeployment + i * secsInDay, 0);
