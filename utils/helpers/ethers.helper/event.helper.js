@@ -3,7 +3,12 @@ const { addressDiamond } = require("../../../utils/constants/adresses/diamond");
 const { abiDiamond } = require("../../../utils/constants/abis/diamond");
 const { abiUSDC } = require("../../../utils/constants/abis/usdc");
 const { addressUSDC } = require("../../../utils/constants/adresses/usdc");
-const { addYieldToday } = require("../index.helper/index.helper");
+const {
+  addYieldToday,
+  getBlockData,
+  timeSerializer,
+  addYield,
+} = require("../index.helper/index.helper");
 require("dotenv").config();
 
 const listenDiamond = async () => {
@@ -68,6 +73,34 @@ const listenDiamond = async () => {
   }
 };
 
+const getPastEvents = async () => {
+  const provider = new ethers.JsonRpcProvider(
+    `https://arb-goerli.g.alchemy.com/v2/${process.env.API_KEY}`
+  );
+  const diamond_Contract = new ethers.Contract(
+    addressDiamond,
+    abiDiamond,
+    provider
+  );
+  const pastEvents = await diamond_Contract.queryFilter(
+    "TotalSupplyUpdated",
+    20747960
+  );
+  return pastEvents;
+};
+
+const fillInDBPastEventsData = async () => {
+  const pastEvents = await getPastEvents();
+  pastEvents.forEach((pastEvent) => {
+    getBlockData(pastEvent.blockNumber).then((blockData) => {
+      addYield(
+        timeSerializer(blockData.timestamp * 1000),
+        ethers.formatUnits(pastEvent.args[2], 18)
+      );
+    });
+  });
+};
+
 const listenUsdc = async () => {
   try {
     const provider = new ethers.JsonRpcProvider(
@@ -94,4 +127,6 @@ const listenUsdc = async () => {
 
 module.exports = {
   listenDiamond,
+  getPastEvents,
+  fillInDBPastEventsData,
 };

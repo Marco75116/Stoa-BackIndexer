@@ -26,17 +26,16 @@ const timeSerializer = (currentTimestamp) => {
   return timestamp;
 };
 
-const getBlockDeployement = async () => {
+const getBlockData = async (blockNumber) => {
   const provider = new ethers.JsonRpcProvider(
     `https://arb-goerli.g.alchemy.com/v2/${process.env.API_KEY}`
   );
-  const nbBlockDeploy = 20747960;
-  const block = await provider.getBlock(nbBlockDeploy);
+  const block = await provider.getBlock(blockNumber);
   return block;
 };
 
 const preSetupGraphTable = async () => {
-  const blockDeploy = await getBlockDeployement();
+  const blockDeploy = await getBlockData();
   const timestampDeployment = timeSerializer(blockDeploy.timestamp * 1000);
   const secsInDay = 86400;
   var i = 0;
@@ -47,7 +46,7 @@ const preSetupGraphTable = async () => {
 };
 
 const addYieldToday = async (amountYield) => {
-  const currentDate = new Date().getTime() / 1000;
+  const currentDate = new Date().getTime();
   const timestamp = timeSerializer(currentDate);
   addYield(timestamp, amountYield);
 };
@@ -55,7 +54,8 @@ const addYieldToday = async (amountYield) => {
 module.exports = {
   convertAbi,
   timeSerializer,
-  getBlockDeployement,
+  getBlockData,
   preSetupGraphTable,
   addYieldToday,
+  addYield,
 };
