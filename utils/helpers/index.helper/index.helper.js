@@ -35,13 +35,15 @@ const getBlockDeployement = async () => {
   return block;
 };
 
-const preSetupGraphTable = async (amountDay) => {
+const preSetupGraphTable = async () => {
   const blockDeploy = await getBlockDeployement();
   const timestampDeployment = timeSerializer(blockDeploy.timestamp * 1000);
-  const secsInDay = 84600;
-  for (let i = 0; i < amountDay; i++) {
+  const secsInDay = 86400;
+  var i = 0;
+  setInterval(() => {
     insert(timestampDeployment + i * secsInDay, 0);
-  }
+    i += 1;
+  }, 1000);
 };
 
 const addYieldToday = async (amountYield) => {
