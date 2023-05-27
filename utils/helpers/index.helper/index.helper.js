@@ -40,15 +40,19 @@ const preSetupGraphTable = async () => {
   const secsInDay = 86400;
   var i = 0;
   setInterval(() => {
-    insert(timestampDeployment + i * secsInDay, 0);
+    insert(timestampDeployment + i * secsInDay, 0, 0, 0);
     i += 1;
   }, 1000);
 };
 
-const addYieldToday = async (amountYield) => {
+const addYieldToday = async (
+  amountYieldUSDFI,
+  amountYieldETHFI,
+  amountYieldBTCFI
+) => {
   const currentDate = new Date().getTime();
   const timestamp = timeSerializer(currentDate);
-  addYield(timestamp, amountYield);
+  addYield(timestamp, amountYieldUSDFI, amountYieldETHFI, amountYieldBTCFI);
 };
 
 module.exports = {

@@ -4,6 +4,12 @@ const { abiDiamond } = require("../../../utils/constants/abis/diamond");
 const { abiUSDC } = require("../../../utils/constants/abis/usdc");
 const { addressUSDC } = require("../../../utils/constants/adresses/usdc");
 const {
+  addressUSDFI,
+  addressBTCFI,
+  addressETHFI,
+} = require("../../../utils/constants/adresses/addressesFI/addressesFI");
+
+const {
   addYieldToday,
   getBlockData,
   timeSerializer,
@@ -40,7 +46,17 @@ const listenDiamond = async () => {
           yield: ethers.formatUnits(yield, 18),
           // data: event,
         };
-        addYieldToday(info.yield);
+        addYieldToday(
+          pastEvent.args[0] === addressUSDFI
+            ? ethers.formatUnits(pastEvent.args[2], 18)
+            : 0,
+          pastEvent.args[0] === addressETHFI
+            ? ethers.formatUnits(pastEvent.args[2], 18)
+            : 0,
+          pastEvent.args[0] === addressBTCFI
+            ? ethers.formatUnits(pastEvent.args[2], 18)
+            : 0
+        );
       }
     );
 
@@ -95,12 +111,20 @@ const fillInDBPastEventsData = async () => {
     getBlockData(pastEvent.blockNumber).then((blockData) => {
       addYield(
         timeSerializer(blockData.timestamp * 1000),
-        ethers.formatUnits(pastEvent.args[2], 18)
+        pastEvent.args[0] === addressUSDFI
+          ? ethers.formatUnits(pastEvent.args[2], 18)
+          : 0,
+        pastEvent.args[0] === addressETHFI
+          ? ethers.formatUnits(pastEvent.args[2], 18)
+          : 0,
+        pastEvent.args[0] === addressBTCFI
+          ? ethers.formatUnits(pastEvent.args[2], 18)
+          : 0
       );
     });
   });
 };
-
+// ethers.formatUnits(pastEvent.args[2], 18)
 const listenUsdc = async () => {
   try {
     const provider = new ethers.JsonRpcProvider(
