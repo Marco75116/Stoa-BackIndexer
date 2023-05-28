@@ -124,7 +124,7 @@ const fillInDBPastEventsData = async () => {
     });
   });
 };
-// ethers.formatUnits(pastEvent.args[2], 18)
+
 const listenUsdc = async () => {
   try {
     const provider = new ethers.JsonRpcProvider(
@@ -137,13 +137,10 @@ const listenUsdc = async () => {
       let info = {
         from: from,
         to: to,
-        value: ethers.formatUnits(value, 18),
+        value: ethers.formatUnits(value, 6),
         data: event,
       };
     });
-
-    //   usdc_Contract.on("*", (log, evt) => {
-    //   });
   } catch (error) {
     throw error("listenUsdc failed: " + error);
   }

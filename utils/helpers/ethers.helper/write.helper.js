@@ -1,7 +1,9 @@
 const { ethers } = require("ethers");
-const { addressUSDCOFI } = require("../../constants/adresses/UsdCOFI");
+const {
+  addressUSDFI,
+} = require("../../constants/adresses/addressesFI/addressesFI");
 
-const rebase = async (addressFiAsset = addressUSDCOFI) => {
+const rebase = async (addressFiAsset = addressUSDFI) => {
   try {
     const provider = new ethers.JsonRpcProvider(
       `https://arb-goerli.g.alchemy.com/v2/${process.env.API_KEY}`

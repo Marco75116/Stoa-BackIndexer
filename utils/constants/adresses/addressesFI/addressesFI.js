@@ -1,9 +1,9 @@
-const addressUSDFI = "0x09a52a1c6093E61fEB5AB9E1597BbAfE72cC5992";
-const addressBTCFI = "0x171727e5D16C63683996962a05148f56c3a028A9";
-const addressETHFI = "0xd75F5608f4a38A75F2435f652164c138B2eb9A29";
+const addressUSDFI = "0x9A57B7A9f3Eb9578728113d965b48c525fCb4e20";
+const addressETHFI = "0x65F29A21a05f4B282Baf8BCcA223a9a3B4d6a4Ad";
+const addressBTCFI = "0x17d013b32d115279776F9bc725613ADf357AE216";
 
 module.exports = {
   addressUSDFI,
-  addressBTCFI,
   addressETHFI,
+  addressBTCFI,
 };
