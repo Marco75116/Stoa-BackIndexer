@@ -61,8 +61,7 @@ const addYieldToday = async (
   feeBTCFI
 ) => {
   const currentDate = new Date().getTime();
-  const offset = 120 * 60;
-  const timestamp = timeSerializer(currentDate) + offset;
+  const timestamp = timeSerializer(currentDate);
   addYield(
     timestamp,
     amountYieldUSDFI,
