@@ -39,48 +39,28 @@ const listenDiamond = async () => {
 
     diamond_Contract.on(
       "TotalSupplyUpdated",
-      (fiAsset, assets, yield, event) => {
-        let info = {
-          fiAsset: fiAsset,
-          assets: ethers.formatUnits(assets, 18),
-          yield: ethers.formatUnits(yield, 18),
-          // data: event,
-        };
+      (fiAsset, assets, yield, rCPT, fee, event) => {
+        console.log(
+          "yield: ",
+          ethers.formatUnits(yield, 18),
+          "rCPT :",
+          ethers.formatUnits(rCPT, 18),
+          "fee: ",
+          ethers.formatUnits(fee, 18)
+        );
         addYieldToday(
-          pastEvent.args[0] === addressUSDFI
-            ? ethers.formatUnits(pastEvent.args[2], 18)
-            : 0,
-          pastEvent.args[0] === addressETHFI
-            ? ethers.formatUnits(pastEvent.args[2], 18)
-            : 0,
-          pastEvent.args[0] === addressBTCFI
-            ? ethers.formatUnits(pastEvent.args[2], 18)
-            : 0
+          fiAsset === addressUSDFI ? ethers.formatUnits(yield, 18) : 0,
+          fiAsset === addressETHFI ? ethers.formatUnits(yield, 18) : 0,
+          fiAsset === addressBTCFI ? ethers.formatUnits(yield, 18) : 0,
+          fiAsset === addressUSDFI ? ethers.formatUnits(rCPT, 18) : 0,
+          fiAsset === addressETHFI ? ethers.formatUnits(rCPT, 18) : 0,
+          fiAsset === addressBTCFI ? ethers.formatUnits(rCPT, 18) : 0,
+          fiAsset === addressUSDFI ? ethers.formatUnits(fee, 18) : 0,
+          fiAsset === addressETHFI ? ethers.formatUnits(fee, 18) : 0,
+          fiAsset === addressBTCFI ? ethers.formatUnits(fee, 18) : 0
         );
       }
     );
-
-    // diamond_Contract.on(
-    //   "TotalSupplyUpdatedHighres",
-    //   (
-    //     totalSupply,
-    //     rebasingCredits,
-    //     rebasingCreditsPerToken,
-    //     earnings,
-    //     event
-    //   ) => {
-    //     let info = {
-    //       totalSupply: ethers.formatUnits(totalSupply, 18),
-    //       rebasingCredits: ethers.formatUnits(rebasingCredits, 18),
-    //       rebasingCreditsPerToken: ethers.formatUnits(
-    //         rebasingCreditsPerToken,
-    //         18
-    //       ),
-    //       earnings: ethers.formatUnits(earnings, 18),
-    //       data: event,
-    //     };
-    //   }
-    // );
 
     // diamond_Contract.on("*", (log, event) => {
     // });
@@ -119,7 +99,13 @@ const fillInDBPastEventsData = async () => {
           : 0,
         pastEvent.args[0] === addressBTCFI
           ? ethers.formatUnits(pastEvent.args[2], 18)
-          : 0
+          : 0,
+        pastEvent.args[0] === addressUSDFI ? pastEvent.args[3] : 0,
+        pastEvent.args[0] === addressETHFI ? pastEvent.args[3] : 0,
+        pastEvent.args[0] === addressBTCFI ? pastEvent.args[3] : 0,
+        pastEvent.args[0] === addressUSDFI ? pastEvent.args[4] : 0,
+        pastEvent.args[0] === addressETHFI ? pastEvent.args[4] : 0,
+        pastEvent.args[0] === addressBTCFI ? pastEvent.args[4] : 0
       );
     });
   });

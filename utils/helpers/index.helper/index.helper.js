@@ -1,13 +1,15 @@
 const { ethers, Interface } = require("ethers");
 const { insert, addYield } = require("../sql.helper/sql.helper");
+const { blockDeploy } = require("../../constants/adresses/diamond");
 require("dotenv").config();
 
 const convertAbi = () => {
   try {
     // enter here view,write & event that you want to convert from Human-Readable ABI to Solidity JSON ABI
     const humanReadableAbi = [
-      "event TotalSupplyUpdatedHighres(uint256 totalSupply,uint256 rebasingCredits,uint256 rebasingCreditsPerToken,uint256 earnings)",
-      "event TotalSupplyUpdated(address indexed fiAsset, uint256 assets, uint256 yield)",
+      "event TotalSupplyUpdated(address indexed fiAsset, uint256 assets, uint256 yield, uint256 rCPT, uint256 fee)",
+      "event Deposit(address indexed asset, uint256 amount, address indexed depositFrom, uint256 fee)",
+      "event Withdraw(address indexed asset, uint256 amount, address indexed depositFrom, uint256 fee)",
     ];
 
     const iface = new Interface(humanReadableAbi);
@@ -35,8 +37,10 @@ const getBlockData = async (blockNumber) => {
 };
 
 const preSetupGraphTable = async () => {
-  const blockDeploy = await getBlockData();
-  const timestampDeployment = timeSerializer(blockDeploy.timestamp * 1000);
+  const blockDeployNumber = await getBlockData(blockDeploy);
+  const timestampDeployment = timeSerializer(
+    blockDeployNumber.timestamp * 1000
+  );
   const secsInDay = 86400;
   var i = 0;
   setInterval(() => {
@@ -48,11 +52,28 @@ const preSetupGraphTable = async () => {
 const addYieldToday = async (
   amountYieldUSDFI,
   amountYieldETHFI,
-  amountYieldBTCFI
+  amountYieldBTCFI,
+  rCPTUSDFI,
+  rCPTETHFI,
+  rCPTBTCFI,
+  feeUSDFI,
+  feeETHFI,
+  feeBTCFI
 ) => {
   const currentDate = new Date().getTime();
   const timestamp = timeSerializer(currentDate);
-  addYield(timestamp, amountYieldUSDFI, amountYieldETHFI, amountYieldBTCFI);
+  addYield(
+    timestamp,
+    amountYieldUSDFI,
+    amountYieldETHFI,
+    amountYieldBTCFI,
+    rCPTUSDFI,
+    rCPTETHFI,
+    rCPTBTCFI,
+    feeUSDFI,
+    feeETHFI,
+    feeBTCFI
+  );
 };
 
 module.exports = {

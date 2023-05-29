@@ -9,9 +9,21 @@ const pool = createPool({
   connectionLimit: 10,
 });
 
-const insert = (day, yieldUSDFI, yieldETHFI, yieldBTCFI) => {
+const insert = (
+  day,
+  yieldUSDFI,
+  yieldETHFI,
+  yieldBTCFI,
+  rCPTUSDFI,
+  rCPTETHFI,
+  rCPTBTCFI,
+  feeUSDFI,
+  feeETHFI,
+  feeBTCFI
+) => {
   pool.query(
-    `INSERT INTO graph (day,amountUSDFI,amountETHFI,amountBTCFI) VALUES (${day},${yieldUSDFI},${yieldETHFI},${yieldBTCFI})`,
+    `INSERT INTO graph (day,amountUSDFI,amountETHFI,amountBTCFI, rCPTUSDFI, rCPTETHFI, rCPTBTCFI, feeUSDFI, feeETHFI, feeBTCFI) 
+    VALUES (${day},${yieldUSDFI},${yieldETHFI},${yieldBTCFI}, ${rCPTUSDFI}, ${rCPTETHFI}, ${rCPTBTCFI},${feeUSDFI}, ${feeETHFI}, ${feeBTCFI} )`,
     (err, result, fields) => {
       if (err) {
         return console.error(err);
@@ -21,10 +33,24 @@ const insert = (day, yieldUSDFI, yieldETHFI, yieldBTCFI) => {
   );
 };
 
-const addYield = (day, yieldUSDFI, yieldETHFI, yieldBTCFI) => {
+const addYield = (
+  day,
+  yieldUSDFI,
+  yieldETHFI,
+  yieldBTCFI,
+  rCPTUSDFI,
+  rCPTETHFI,
+  rCPTBTCFI,
+  feeUSDFI,
+  feeETHFI,
+  feeBTCFI
+) => {
   pool.query(
     `UPDATE graph 
-      set amountUSDFI= amountUSDFI + ${yieldUSDFI}, amountETHFI= amountETHFI + ${yieldETHFI}, amountBTCFI= amountBTCFI + ${yieldBTCFI} where day=${day}`,
+      set amountUSDFI= amountUSDFI + ${yieldUSDFI}, amountETHFI= amountETHFI + ${yieldETHFI}, amountBTCFI= amountBTCFI + ${yieldBTCFI},
+      rCPTUSDFI=${rCPTUSDFI}, rCPTETHFI=${rCPTETHFI}, rCPTBTCFI=${rCPTBTCFI},
+      feeUSDFI=feeUSDFI+${feeUSDFI}, feeETHFI=feeETHFI+${feeETHFI}, feeBTCFI=feeBTCFI+${feeBTCFI} 
+      where day=${day}`,
     (err, result, fields) => {
       if (err) {
         return console.error(err);
