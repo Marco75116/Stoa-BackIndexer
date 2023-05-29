@@ -48,8 +48,11 @@ const addYield = (
   pool.query(
     `UPDATE graph 
       set amountUSDFI= amountUSDFI + ${yieldUSDFI}, amountETHFI= amountETHFI + ${yieldETHFI}, amountBTCFI= amountBTCFI + ${yieldBTCFI},
-      rCPTUSDFI=${rCPTUSDFI}, rCPTETHFI=${rCPTETHFI}, rCPTBTCFI=${rCPTBTCFI},
-      feeUSDFI=feeUSDFI+${feeUSDFI}, feeETHFI=feeETHFI+${feeETHFI}, feeBTCFI=feeBTCFI+${feeBTCFI} 
+      rCPTUSDFI= ${rCPTUSDFI === 0 ? "rCPTUSDFI" : rCPTUSDFI}, rCPTETHFI= ${
+      rCPTETHFI === 0 ? "rCPTETHFI" : rCPTETHFI
+    }, rCPTBTCFI=${
+      rCPTBTCFI === 0 ? "rCPTBTCFI" : rCPTBTCFI
+    },feeUSDFI=feeUSDFI+${feeUSDFI}, feeETHFI=feeETHFI+${feeETHFI}, feeBTCFI=feeBTCFI+${feeBTCFI} 
       where day=${day}`,
     (err, result, fields) => {
       if (err) {

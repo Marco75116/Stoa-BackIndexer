@@ -13,8 +13,8 @@ const {
   addYieldToday,
   getBlockData,
   timeSerializer,
-  addYield,
 } = require("../index.helper/index.helper");
+const { addYield } = require("../sql.helper/sql.helper");
 require("dotenv").config();
 
 const listenDiamond = async () => {
@@ -89,8 +89,10 @@ const fillInDBPastEventsData = async () => {
   const pastEvents = await getPastEvents();
   pastEvents.forEach((pastEvent) => {
     getBlockData(pastEvent.blockNumber).then((blockData) => {
+      const offset = 120 * 60;
+
       addYield(
-        timeSerializer(blockData.timestamp * 1000),
+        timeSerializer(blockData.timestamp * 1000) + offset,
         pastEvent.args[0] === addressUSDFI
           ? ethers.formatUnits(pastEvent.args[2], 18)
           : 0,
@@ -100,12 +102,24 @@ const fillInDBPastEventsData = async () => {
         pastEvent.args[0] === addressBTCFI
           ? ethers.formatUnits(pastEvent.args[2], 18)
           : 0,
-        pastEvent.args[0] === addressUSDFI ? pastEvent.args[3] : 0,
-        pastEvent.args[0] === addressETHFI ? pastEvent.args[3] : 0,
-        pastEvent.args[0] === addressBTCFI ? pastEvent.args[3] : 0,
-        pastEvent.args[0] === addressUSDFI ? pastEvent.args[4] : 0,
-        pastEvent.args[0] === addressETHFI ? pastEvent.args[4] : 0,
-        pastEvent.args[0] === addressBTCFI ? pastEvent.args[4] : 0
+        pastEvent.args[0] === addressUSDFI
+          ? ethers.formatUnits(pastEvent.args[3], 18)
+          : 0,
+        pastEvent.args[0] === addressETHFI
+          ? ethers.formatUnits(pastEvent.args[3], 18)
+          : 0,
+        pastEvent.args[0] === addressBTCFI
+          ? ethers.formatUnits(pastEvent.args[3], 18)
+          : 0,
+        pastEvent.args[0] === addressUSDFI
+          ? ethers.formatUnits(pastEvent.args[4], 18)
+          : 0,
+        pastEvent.args[0] === addressETHFI
+          ? ethers.formatUnits(pastEvent.args[4], 18)
+          : 0,
+        pastEvent.args[0] === addressBTCFI
+          ? ethers.formatUnits(pastEvent.args[4], 18)
+          : 0
       );
     });
   });

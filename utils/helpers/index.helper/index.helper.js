@@ -22,13 +22,9 @@ const convertAbi = () => {
 
 const timeSerializer = (currentTimestamp) => {
   const currentDate = new Date(currentTimestamp);
-  const timeZone = "Europe/Paris";
-  const options = { timeZone: timeZone };
-  const dateString = currentDate.toLocaleString("en-US", options);
-  const convertedDate = new Date(dateString);
-  convertedDate.setHours(0, 0, 0, 0);
+  currentDate.setHours(0, 0, 0, 0);
+  const timestamp = Math.floor(currentDate.getTime() / 1000);
 
-  const timestamp = Math.floor(convertedDate.getTime() / 1000);
   return timestamp;
 };
 
@@ -42,13 +38,13 @@ const getBlockData = async (blockNumber) => {
 
 const preSetupGraphTable = async () => {
   const blockDeployNumber = await getBlockData(blockDeploy);
-  const timestampDeployment = timeSerializer(
-    blockDeployNumber.timestamp * 1000
-  );
+  const offset = 120 * 60;
+  const timestampDeployment =
+    timeSerializer(blockDeployNumber.timestamp * 1000) + offset;
   const secsInDay = 86400;
   var i = 0;
   setInterval(() => {
-    insert(timestampDeployment + i * secsInDay, 0, 0, 0);
+    insert(timestampDeployment + i * secsInDay, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     i += 1;
   }, 1000);
 };
@@ -65,7 +61,8 @@ const addYieldToday = async (
   feeBTCFI
 ) => {
   const currentDate = new Date().getTime();
-  const timestamp = timeSerializer(currentDate);
+  const offset = 120 * 60;
+  const timestamp = timeSerializer(currentDate) + offset;
   addYield(
     timestamp,
     amountYieldUSDFI,
@@ -86,5 +83,4 @@ module.exports = {
   getBlockData,
   preSetupGraphTable,
   addYieldToday,
-  addYield,
 };
