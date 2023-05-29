@@ -22,9 +22,13 @@ const convertAbi = () => {
 
 const timeSerializer = (currentTimestamp) => {
   const currentDate = new Date(currentTimestamp);
-  currentDate.setHours(0, 0, 0, 0);
-  const timestamp = Math.floor(currentDate.getTime() / 1000);
+  const timeZone = "Europe/Paris";
+  const options = { timeZone: timeZone };
+  const dateString = currentDate.toLocaleString("en-US", options);
+  const convertedDate = new Date(dateString);
+  convertedDate.setHours(0, 0, 0, 0);
 
+  const timestamp = Math.floor(convertedDate.getTime() / 1000);
   return timestamp;
 };
 
