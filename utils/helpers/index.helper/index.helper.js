@@ -67,7 +67,12 @@ const addYieldToday = async (
   feeBTCFI
 ) => {
   const todayTimestamp = getDayTimestamp();
-  console.log("todayTimestamp", todayTimestamp);
+  console.log(
+    "todayTimestamp",
+    todayTimestamp,
+    "nowTimestamp",
+    new Date().getTime()
+  );
   addYield(
     todayTimestamp,
     amountYieldUSDFI,
