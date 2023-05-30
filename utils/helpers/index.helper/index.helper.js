@@ -49,6 +49,12 @@ const preSetupGraphTable = async () => {
   }, 1000);
 };
 
+const getDayTimestamp = () => {
+  const currentDate = new Date().getTime();
+  const dayTimestamp = timeSerializer(currentDate);
+  return dayTimestamp;
+};
+
 const addYieldToday = async (
   amountYieldUSDFI,
   amountYieldETHFI,
@@ -60,10 +66,10 @@ const addYieldToday = async (
   feeETHFI,
   feeBTCFI
 ) => {
-  const currentDate = new Date().getTime();
-  const timestamp = timeSerializer(currentDate);
+  const todayTimestamp = getDayTimestamp();
+  console.log("todayTimestamp", todayTimestamp);
   addYield(
-    timestamp,
+    todayTimestamp,
     amountYieldUSDFI,
     amountYieldETHFI,
     amountYieldBTCFI,
@@ -82,4 +88,5 @@ module.exports = {
   getBlockData,
   preSetupGraphTable,
   addYieldToday,
+  getDayTimestamp,
 };
