@@ -66,6 +66,7 @@ const addYieldToday = async (
   feeETHFI,
   feeBTCFI
 ) => {
+  const todayTimestamp = getDayTimestamp();
   addYield(
     todayTimestamp,
     amountYieldUSDFI,
