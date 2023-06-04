@@ -6,7 +6,7 @@ const {
 const rebase = async (addressFiAsset = addressUSDFI) => {
   try {
     const provider = new ethers.JsonRpcProvider(
-      `https://arb-goerli.g.alchemy.com/v2/${process.env.API_KEY}`
+      `https://opt-mainnet.g.alchemy.com/v2/${process.env.API_KEY}`
     );
     const signer = new ethers.Wallet(process.env.SECRET_KEY, provider);
     const diamond_Contract = await new ethers.Contract(

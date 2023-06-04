@@ -1,5 +1,5 @@
-const addressDiamond = "0x0B248fEEf13813fDF1afE2581e1052D164F9A6E8";
-const blockDeploy = 22451094;
+const addressDiamond = "0x1B61BD8Cc32D77c6aa1EfE27eF51223b8c078e78";
+const blockDeploy = 104557232;
 
 module.exports = {
   addressDiamond,

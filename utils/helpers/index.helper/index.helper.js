@@ -30,7 +30,7 @@ const timeSerializer = (currentTimestamp) => {
 
 const getBlockData = async (blockNumber) => {
   const provider = new ethers.JsonRpcProvider(
-    `https://arb-goerli.g.alchemy.com/v2/${process.env.API_KEY}`
+    `https://opt-mainnet.g.alchemy.com/v2/${process.env.API_KEY}`
   );
   const block = await provider.getBlock(blockNumber);
   return block;

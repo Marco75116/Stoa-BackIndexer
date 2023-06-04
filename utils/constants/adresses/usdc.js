@@ -1,4 +1,4 @@
-const addressUSDC = "0xa619957234B95fc266EDcA6EAec06b23dff1F5A2";
+const addressUSDC = "0x7F5c764cBc14f9669B88837ca1490cCa17c31607";
 
 module.exports = {
   addressUSDC,
