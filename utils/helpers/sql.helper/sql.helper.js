@@ -63,7 +63,35 @@ const addYield = (
   );
 };
 
+const addDeposit = (wallet, depositUSDFI, depositETHFI, depositBTCFI) => {
+  pool.query(
+    `UPDATE walletData 
+      set depositUSDFI= depositUSDFI + ${depositUSDFI} , depositETHFI= depositETHFI + ${depositETHFI} , depositBTCFI= depositBTCFI + ${depositBTCFI}
+      where wallet='${wallet}'`,
+    (err, result, fields) => {
+      if (err) {
+        return console.error(err);
+      }
+      console.log(result.message);
+    }
+  );
+};
+
+const addWithdraw = (wallet, withdrawUSDFI, withdrawETHFI, withdrawBTCFI) => {
+  pool.query(
+    `UPDATE walletData  set depositUSDFI= depositUSDFI - ${withdrawUSDFI} , depositETHFI= depositETHFI - ${withdrawETHFI} , depositBTCFI= depositBTCFI - ${withdrawBTCFI} where wallet='${wallet}'`,
+    (err, result, fields) => {
+      if (err) {
+        return console.error(err);
+      }
+      console.log(result.message);
+    }
+  );
+};
+
 module.exports = {
   insert,
   addYield,
+  addDeposit,
+  addWithdraw,
 };

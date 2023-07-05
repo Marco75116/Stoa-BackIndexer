@@ -1,9 +1,15 @@
 const addressUSDFI = "0x04a951e7A7777A80B421DF2b32D0859a24b7AE85";
 const addressETHFI = "0xEdBad3B9EC7B813CF74b11B2eCE1578494371aa4";
 const addressBTCFI = "0x0295EBB7265E71fa5A35B1aD428dC6e2E2fcB825";
+const addressUSDC = "0x7F5c764cBc14f9669B88837ca1490cCa17c31607";
+const addressETH = "0x4200000000000000000000000000000000000006";
+const addressBTC = "0x68f180fcCe6836688e9084f035309E29Bf0A2095";
 
 module.exports = {
   addressUSDFI,
   addressETHFI,
   addressBTCFI,
+  addressUSDC,
+  addressETH,
+  addressBTC,
 };

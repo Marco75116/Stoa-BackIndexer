@@ -1,15 +1,18 @@
-const { ethers, Interface } = require("ethers");
+const { ethers } = require("ethers");
 const {
   addressDiamond,
   blockDeploy,
 } = require("../../../utils/constants/adresses/diamond");
 const { abiDiamond } = require("../../../utils/constants/abis/diamond");
 const { abiUSDC } = require("../../../utils/constants/abis/usdc");
-const { addressUSDC } = require("../../../utils/constants/adresses/usdc");
+
 const {
   addressUSDFI,
   addressBTCFI,
   addressETHFI,
+  addressETH,
+  addressBTC,
+  addressUSDC,
 } = require("../../../utils/constants/adresses/addressesFI/addressesFI");
 
 const {
@@ -17,7 +20,11 @@ const {
   getBlockData,
   timeSerializer,
 } = require("../index.helper/index.helper");
-const { addYield } = require("../sql.helper/sql.helper");
+const {
+  addYield,
+  addDeposit,
+  addWithdraw,
+} = require("../sql.helper/sql.helper");
 require("dotenv").config();
 
 const listenDiamond = async () => {
@@ -31,26 +38,27 @@ const listenDiamond = async () => {
       provider
     );
 
-    // diamond_Contract.on("Mint", (fiAsset, amount, from, event) => {
-    //   let info = {
-    //     fiAsset: fiAsset,
-    //     amount: ethers.formatUnits(amount, 18),
-    //     from: from,
-    //     data: event,
-    //   };
-    // });
-
-    diamond_Contract.on(
-      "TotalSupplyUpdated",
-      (fiAsset, assets, yield, rCPT, fee, event) => {
-        console.log(
-          "yield: ",
-          ethers.formatUnits(yield, 18),
-          "rCPT :",
-          ethers.formatUnits(rCPT, 18),
-          "fee: ",
-          ethers.formatUnits(fee, 18)
+    diamond_Contract.on("*", (...args) => {
+      if (args[0].log.fragment.name === "Withdraw") {
+        const [asset, amount, depositFrom, fee] = args[0].log.args;
+        addWithdraw(
+          depositFrom,
+          asset === addressUSDC ? ethers.formatUnits(amount, 18) : 0,
+          asset === addressETH ? ethers.formatUnits(amount, 18) : 0,
+          asset === addressBTC ? ethers.formatUnits(amount, 18) : 0
         );
+      }
+      if (args[0].log.fragment.name === "Deposit") {
+        const [asset, amount, depositFrom, fee] = args[0].log.args;
+        addDeposit(
+          depositFrom,
+          asset === addressUSDC ? ethers.formatUnits(amount, 6) : 0,
+          asset === addressETH ? ethers.formatUnits(amount, 18) : 0,
+          asset === addressBTC ? ethers.formatUnits(amount, 8) : 0
+        );
+      }
+      if (args[0].log.fragment.name === "TotalSupplyUpdated") {
+        const [fiAsset, assets, yield, rCPT, fee] = args[0].log.args;
         addYieldToday(
           fiAsset === addressUSDFI ? ethers.formatUnits(yield, 18) : 0,
           fiAsset === addressETHFI ? ethers.formatUnits(yield, 18) : 0,
@@ -63,10 +71,7 @@ const listenDiamond = async () => {
           fiAsset === addressBTCFI ? ethers.formatUnits(fee, 18) : 0
         );
       }
-    );
-
-    // diamond_Contract.on("*", (log, event) => {
-    // });
+    });
   } catch (error) {
     throw error("listenDiamond failed: " + error);
   }
