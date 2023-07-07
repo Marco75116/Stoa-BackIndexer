@@ -52,9 +52,13 @@ const listenDiamond = async () => {
         const [asset, amount, depositFrom, fee] = args[0].log.args;
         addDeposit(
           depositFrom,
-          asset === addressUSDC ? ethers.formatUnits(amount, 6) : 0,
-          asset === addressETH ? ethers.formatUnits(amount, 18) : 0,
-          asset === addressBTC ? ethers.formatUnits(amount, 8) : 0
+          asset === addressUSDC
+            ? ethers.formatUnits(amount, 6) - ethers.formatUnits(fee, 18)
+            : 0,
+          asset === addressETH ? ethers.formatUnits(amount - fee, 18) : 0,
+          asset === addressBTC
+            ? ethers.formatUnits(amount, 8) - ethers.formatUnits(fee, 18)
+            : 0
         );
       }
       if (args[0].log.fragment.name === "TotalSupplyUpdated") {
